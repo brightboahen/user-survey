@@ -3,10 +3,10 @@
  */
 require('./main.css');
 import React from 'react';
-import QuestionComponent from  './question_comp';
+import QuestionsPage from  './questions_page';
 import { render } from 'react-dom';
 
 render(
-    <QuestionComponent title="Survey"/>,
+    <QuestionsPage title="Survey"/>,
     document.getElementById('app')
 );
