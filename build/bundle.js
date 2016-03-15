@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "8dba2fdf12b4905eda7c"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "36dd643f9f8b487e873a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -20196,8 +20196,6 @@
 	    value: true
 	});
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -20238,9 +20236,6 @@
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionsPage).call(this, props));
 
-	        _this.state = {
-	            q4: false
-	        };
 	        _this.brightHead = {
 	            TeacherAge: '',
 	            Sex: '',
@@ -20261,21 +20256,29 @@
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
 	            this.firebaseRef = new _firebase2.default('https://sizzling-fire-1284.firebaseio.com/');
-	            this.firebaseRef.on("child_added", function (snapshot) {
-	                console.log(snapshot);
-	            }.bind(this));
+	            //this.firebaseRef.on("child_added",function(snapshot){
+	            //    console.log(snapshot.val());
+	            //}.bind(this));
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            this.firebaseRef.off();
 	        }
 	    }, {
 	        key: '_pageCallback',
 	        value: function _pageCallback(key, val) {
-	            console.log(typeof key === 'undefined' ? 'undefined' : _typeof(key));
-	            console.log(key + ' ' + val);
 	            this.brightHead[key] = val;
 	        }
 	    }, {
 	        key: '_submitButtonClicked',
 	        value: function _submitButtonClicked() {
-	            console.log(this.brightHead);
+	            if (this.brightHead.YearGroup !== '') {
+	                this.firebaseRef.push(this.brightHead);
+	                alert("Responses successfully submitted,thank you");
+	            } else {
+	                alert("Please fill in more questions");
+	            }
 	        }
 	    }, {
 	        key: 'render',
@@ -20288,7 +20291,7 @@
 	                    { className: 'large-12 columns' },
 	                    _react2.default.createElement(
 	                        _dropdown2.default,
-	                        { isMultiple: true, compIdentifier: 'TeacherAge', selectItems: ['20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69'], callBackFunc: this._pageCallback.bind(this) },
+	                        { isMultiple: false, compIdentifier: 'TeacherAge', selectItems: ['20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69'], callBackFunc: this._pageCallback.bind(this) },
 	                        'Please select your age group'
 	                    )
 	                ),
@@ -20309,7 +20312,7 @@
 	                        { isMultiple: true,
 	                            compIdentifier: 'Subject',
 	                            selectItems: ['English', 'Maths', 'Science', 'Design and Technology', 'History', 'Geography', 'Art and Design', 'Music', 'PE', 'Computing', 'Ancient and Modern Foreign Languages', 'Citizenship'], callBackFunc: this._pageCallback.bind(this) },
-	                        'Please select the subject(s) that you teach'
+	                        'Please select the subject(s) that you teach - to select multiple subjects hold down \'Ctrl\' key and click on subjects on windows or \'Cmd\' key and click if you are on a Mac.'
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -20320,7 +20323,7 @@
 	                        { isMultiple: true, selectItems: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Yeah 5', 'Yeah 6', 'Yeah 7', 'Year 8', 'Year 9', 'Year 10', 'Year 11'],
 	                            compIdentifier: 'YearGroup',
 	                            callBackFunc: this._pageCallback.bind(this) },
-	                        'Please select the year group that you teach'
+	                        'Please select the year group that you teach - to select multiple year groups hold down \'Ctrl\' key and click on subjects on windows or \'Cmd\' key and click if you are on a Mac.'
 	                    )
 	                ),
 	                _react2.default.createElement(_question_comp2.default, { callBackFunc: this._pageCallback.bind(this) }),
@@ -20382,8 +20385,6 @@
 	    _createClass(DropdownComp, [{
 	        key: "_multiItemSelected",
 	        value: function _multiItemSelected() {
-	            console.log(this.refs.multiSelect.value);
-	            console.log(this.props.compIdentifier);
 	            this.props.callBackFunc && this.props.callBackFunc(this.props.compIdentifier, this.refs.multiSelect.value);
 	        }
 	    }, {
@@ -20402,20 +20403,37 @@
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            return _react2.default.createElement(
-	                "div",
-	                { className: "questionBox" },
-	                _react2.default.createElement(
+	            if (this.props.isMultiple) {
+	                return _react2.default.createElement(
 	                    "div",
-	                    null,
-	                    this.props.children
-	                ),
-	                _react2.default.createElement(
-	                    "select",
-	                    { ref: "multiSelect", onChange: this._multiItemSelected.bind(this) },
-	                    this.renderSelectItems()
-	                )
-	            );
+	                    { className: "questionBox" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        null,
+	                        this.props.children
+	                    ),
+	                    _react2.default.createElement(
+	                        "select",
+	                        { multiple: true, ref: "multiSelect", onChange: this._multiItemSelected.bind(this) },
+	                        this.renderSelectItems()
+	                    )
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    "div",
+	                    { className: "questionBox" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        null,
+	                        this.props.children
+	                    ),
+	                    _react2.default.createElement(
+	                        "select",
+	                        { ref: "multiSelect", onChange: this._multiItemSelected.bind(this) },
+	                        this.renderSelectItems()
+	                    )
+	                );
+	            }
 	        }
 	    }]);
 
@@ -20472,7 +20490,6 @@
 	    _createClass(RadioComp, [{
 	        key: '_radioButtonChange',
 	        value: function _radioButtonChange(label) {
-	            console.log(this);
 	            switch (label) {
 	                case 'Male':
 	                    this.setState({ male: true, female: false });
@@ -20581,8 +20598,6 @@
 	    _createClass(QuestionComponent, [{
 	        key: 'checkTheNextQuestion',
 	        value: function checkTheNextQuestion(arg) {
-	            console.log('yay he called be back');
-	            console.log(arg);
 	            switch (arg) {
 	                case 'None':
 	                    this.setState({ isNone: true, isOther: false });
@@ -20594,7 +20609,6 @@
 	                    break;
 
 	            }
-	            console.log(this);
 	            this.props.callBackFunc && this.props.callBackFunc('Tools', arg);
 	        }
 	    }, {
@@ -20732,7 +20746,6 @@
 	    }, {
 	        key: '_radioButtonChange',
 	        value: function _radioButtonChange(label) {
-	            console.log(this);
 	            switch (label) {
 	                case 'None':
 	                    this.setState({ leftState: true, rightState: false, showInput: false });
@@ -20769,7 +20782,6 @@
 	    }, {
 	        key: '_onTextAreaChange',
 	        value: function _onTextAreaChange() {
-	            console.log(this.props.compIdentifier);
 	            this.props.callBackFunky && this.props.callBackFunky(this.props.compIdentifier, this.refs.textInputArea.value);
 	        }
 	    }, {

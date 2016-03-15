@@ -55,7 +55,7 @@ class QuestionsPage extends React.Component{
     render(){
         return <div className="row">
             <div className="large-12 columns">
-                <DropdownComp isMultiple={true} compIdentifier="TeacherAge" selectItems={['20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69']} callBackFunc={this._pageCallback.bind(this)}>
+                <DropdownComp isMultiple={false} compIdentifier="TeacherAge" selectItems={['20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69']} callBackFunc={this._pageCallback.bind(this)}>
                     Please select your age group
                 </DropdownComp>
             </div>
@@ -68,14 +68,14 @@ class QuestionsPage extends React.Component{
                 <DropdownComp isMultiple={true}
                               compIdentifier = "Subject"
                               selectItems={['English','Maths','Science','Design and Technology','History','Geography','Art and Design','Music','PE','Computing','Ancient and Modern Foreign Languages','Citizenship']} callBackFunc={this._pageCallback.bind(this)}>
-                    Please select the subject(s) that you teach
+                    Please select the subject(s) that you teach - to select multiple subjects hold down 'Ctrl' key and click on subjects on windows or 'Cmd' key and click if you are on a Mac.
                 </DropdownComp>
             </div>
             <div className="large-12 columns">
                 <DropdownComp isMultiple={true} selectItems={['Year 1','Year 2','Year 3','Year 4','Yeah 5','Yeah 6','Yeah 7','Year 8','Year 9','Year 10','Year 11']}
                               compIdentifier="YearGroup"
                               callBackFunc={this._pageCallback.bind(this)}>
-                    Please select the year group that you teach
+                    Please select the year group that you teach - to select multiple year groups hold down 'Ctrl' key and click on subjects on windows or 'Cmd' key and click if you are on a Mac.
                 </DropdownComp>
             </div>
             <QuestionComp callBackFunc={this._pageCallback.bind(this)}/>

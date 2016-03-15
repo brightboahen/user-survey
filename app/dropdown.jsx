@@ -21,12 +21,22 @@ class DropdownComp extends React.Component{
     }
 
     render(){
-        return <div className="questionBox">
-            <div>{this.props.children}</div>
-            <select ref="multiSelect" onChange={this._multiItemSelected.bind(this)}>
-                {this.renderSelectItems()}
-            </select>
-        </div>
+        if(this.props.isMultiple){
+            return <div className="questionBox">
+                <div>{this.props.children}</div>
+                <select multiple ref="multiSelect" onChange={this._multiItemSelected.bind(this)}>
+                    {this.renderSelectItems()}
+                </select>
+            </div>
+        }else{
+            return <div className="questionBox">
+                <div>{this.props.children}</div>
+                <select ref="multiSelect" onChange={this._multiItemSelected.bind(this)}>
+                    {this.renderSelectItems()}
+                </select>
+            </div>
+        }
+
     }
 }
 DropdownComp.propTypes = {
