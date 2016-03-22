@@ -29,7 +29,7 @@ class QuestionsPage extends React.Component{
     }
 
     componentWillMount(){
-        this.firebaseRef = new Firebase('https://sizzling-fire-1284.firebaseio.com/');
+        this.firebaseRef = new Firebase('https://sizzling-fire-1284.firebaseio.com/survey_data');
         //this.firebaseRef.on("child_added",function(snapshot){
         //    console.log(snapshot.val());
         //}.bind(this));
