@@ -3,6 +3,7 @@ import If from './if';
 class ComboComp extends React.Component{
     constructor(props){
         super(props);
+        this.props = props;
         this.state = {
             leftState : false,
             rightState : false,
@@ -17,11 +18,11 @@ class ComboComp extends React.Component{
     }
     _radioButtonChange(label){
         switch (label){
-            case 'None':
+            case 'Yes':
                 this.setState({leftState:true, rightState:false, showInput:false});
                 this.props.callBackFunc && this.props.callBackFunc(label);
                 break;
-            case 'Other':
+            case 'No':
                 this.setState({rightState:true, leftState:false, showInput:true});
                 this.props.callBackFunc && this.props.callBackFunc(label);
                 break;
@@ -33,6 +34,7 @@ class ComboComp extends React.Component{
         if(this.props.labelsForRadio){
             return this.props.labelsForRadio.map((label, at)=>{
                 return <div key={at} className="inlineRadio">
+                    {console.log(at)}
                     <input name={label} type="radio" checked={at === 0?this.state.leftState:this.state.rightState} onChange={this._radioButtonChange.bind(this,label)} />
                     <label htmlFor={label}>{label}</label>
                 </div>

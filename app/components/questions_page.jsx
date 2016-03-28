@@ -7,6 +7,7 @@ import DropdownComp from './dropdown';
 import RadioComp from './radioComp';
 import QuestionComp from './question_comp';
 import Firebase from 'firebase';
+import Range from './range'
 
 class QuestionsPage extends React.Component{
 
@@ -55,7 +56,10 @@ class QuestionsPage extends React.Component{
     render(){
         return <div className="row">
             <div className="large-12 columns">
-                <DropdownComp isMultiple={false} compIdentifier="TeacherAge" selectItems={['20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69']} callBackFunc={this._pageCallback.bind(this)}>
+                <DropdownComp isMultiple={false}
+                              compIdentifier="TeacherAge"
+                              selectItems={['20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69']}
+                              callBackFunc={this._pageCallback.bind(this)}>
                     Please select your age group
                 </DropdownComp>
             </div>
@@ -77,6 +81,16 @@ class QuestionsPage extends React.Component{
                               callBackFunc={this._pageCallback.bind(this)}>
                     Please select the year group that you teach - to select multiple year groups hold down 'Ctrl' key and click on subjects on windows or 'Cmd' key and click if you are on a Mac.
                 </DropdownComp>
+            </div>
+            <div className="large-12 columns">
+                <Range minValue={0} maxValue={10} rangeStep={1}>
+                    On a scale of 1 - 10, please rate your computing skills
+                </Range>
+            </div>
+            <div className="large-12 columns">
+                <Range minValue={0} maxValue={50} rangeStep={1} desText="Years">
+                    How long have you been teaching?
+                </Range>
             </div>
             <QuestionComp callBackFunc={this._pageCallback.bind(this)}/>
             <div className="large-12 columns">

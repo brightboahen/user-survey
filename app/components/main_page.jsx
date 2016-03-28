@@ -4,6 +4,7 @@ import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router'
 import QuestionsPage from './questions_page'
 import Dashboard from './dashboard'
 import Records from './records'
+import MainComp from './main_component'
 
 class MainPage extends React.Component{
     constructor(props){
@@ -18,6 +19,7 @@ class MainPage extends React.Component{
                 <Route path="/dashboard" component={Dashboard}>
                     <Route path="/records" component={Records}/>
                 </Route>
+            <Route path="/main" component={MainComp}/>
             </Router>
     }
 }

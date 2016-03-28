@@ -16,7 +16,7 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.css$/, loader: "style!css",include:PATHS.app },
-            {   test : /\.jsx$/, loader:'jsx-loader?insertPragma=React.DOM&harmony',include:PATHS.app },
+            { test : /\.jsx?$/, loader:'jsx-loader?insertPragma=React.DOM&harmony',include:PATHS.app },
             { test: /\.jsx$/, exclude: /node_modules/, loader: "babel-loader",include:PATHS.app}
         ]
     },

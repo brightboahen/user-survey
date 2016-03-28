@@ -10,21 +10,20 @@ class QuestionComponent extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            isNone : false,
-            isOther : false
+            isYes : false,
+            isNo : false
         }
     }
     checkTheNextQuestion(arg){
         switch (arg){
-            case 'None':
-                this.setState({isNone:true, isOther:false});
+            case 'Yes':
+                this.setState({isYes:true, isNo:false});
                 break;
-            case 'Other':
-                this.setState({isOther:true, isNone:false});
+            case 'No':
+                this.setState({isYes:false, isNo:true});
                 break;
             default:
                 break;
-
         }
         this.props.callBackFunc && this.props.callBackFunc('Tools',arg);
 
@@ -32,15 +31,23 @@ class QuestionComponent extends React.Component{
     render(){
         return <div>
             <div className="large-12 columns">
-                <ComboComp compIdentifier="currentTools" labelsForRadio={['None','Other']} callBackFunc={this.checkTheNextQuestion.bind(this)} callBackFunky={this.props.callBackFunc}>
-                    What type of tools, websites or applications do you use on a daily basis to aid your teaching? If you do please enter select 'Other' and write them below, if not select "None"
+                <ComboComp
+                    compIdentifier="currentTools"
+                    labelsForRadio={['Yes','No']}
+                    callBackFunc={this.checkTheNextQuestion.bind(this)}
+                    callBackFunky={this.props.callBackFunc}>
+                    Do you use Capita SIMS school management application at your school?
                 </ComboComp>
             </div>
-            <If condition={this.state.isOther}>
+            <If condition={this.state.isYes}>
                 <div>
                     <div className="large-12 columns">
-                        <ComboComp compIdentifier="FavouriteFeatures" callBackFunky={this.props.callBackFunc} showInputOnStart={true}>
-                            Please mention some of the features you like about the above tool(s)
+                        <ComboComp
+                            compIdentifier="FavouriteFeatures"
+                            callBackFunky={this.props.callBackFunc}
+                            labelsForRadio={['Yes','No']}
+                            showInputOnStart={true}>
+                            Do you find it user friendly?
                         </ComboComp>
                     </div>
                     <div className="large-12 columns">
@@ -50,15 +57,20 @@ class QuestionComponent extends React.Component{
                     </div>
                 </div>
             </If>
-            <If condition={this.state.isNone}>
+            <If condition={this.state.isNo}>
                 <div>
                     <div className="large-12 columns">
-                        <ComboComp compIdentifier="NoTools" callBackFunky={this.props.callBackFunc} showInputOnStart={true}>
-                            Why don't you use any tools?
+                        <ComboComp compIdentifier="NoTools"
+                                   labelsForRadio={['Yes','No']}
+                                   callBackFunky={this.props.callBackFunc}
+                                   showInputOnStart={true}>
+                            Have you used other classroom or school management tools or applications?
                         </ComboComp>
                     </div>
                     <div className="large-12 columns">
-                        <ComboComp compIdentifier="DreamTools" callBackFunky={this.props.callBackFunc} showInputOnStart={true}>
+                        <ComboComp compIdentifier="DreamTools"
+                                   callBackFunky={this.props.callBackFunc}
+                                   showInputOnStart={true}>
                             If there were to be a software available to improve your work flow and or productivity what features would you want it to have?
                         </ComboComp>
                     </div>

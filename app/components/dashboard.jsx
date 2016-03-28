@@ -15,7 +15,7 @@ class Dashboard extends React.Component{
         const self = this;
         self.firebaseRef = new Firebase('https://sizzling-fire-1284.firebaseio.com/');
         self.setState({auth:self.firebaseRef.getAuth()});
-        let uid = window.sessionStorage.getItem('user');
+        //let uid = window.sessionStorage.getItem('user');
     }
     loginButtonClicked(){
         const self = this;
