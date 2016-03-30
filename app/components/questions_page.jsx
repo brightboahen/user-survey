@@ -97,7 +97,7 @@ class QuestionsPage extends React.Component{
             <div className="large-12 columns">
                 <DropdownComp isMultiple={true}
                               compIdentifier = "Subject"
-                              selectItems={['English','Maths','Science','Design and Technology','History','Geography','Art and Design','Music','PE','Computing','Ancient and Modern Foreign Languages','Citizenship']} callBackFunc={this._pageCallback.bind(this)}>
+                              selectItems={['English','Maths','Science','Drama','Design and Technology','History','Geography','Art and Design','Music','PE','Computing','Ancient and Modern Foreign Languages','Citizenship']} callBackFunc={this._pageCallback.bind(this)}>
                     Please select the subject(s) that you teach - to select multiple subjects hold down 'Ctrl' key and click on subjects on windows or 'Cmd' key and click if you are on a Mac.
                 </DropdownComp>
             </div>
