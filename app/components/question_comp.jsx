@@ -10,13 +10,18 @@ class QuestionComponent extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            isYes : false,
-            isNo : false
+            isYes       :   false,
+            isNo        :   false,
+            isFriendly  :   false,
+            notFriendly :   false,
+            isTools     :   false,
+            noTools     :   false
         }
     }
     checkTheNextQuestion(arg){
         switch (arg){
             case 'Yes':
+                console.log('is yes');
                 this.setState({isYes:true, isNo:false});
                 break;
             case 'No':
@@ -25,8 +30,33 @@ class QuestionComponent extends React.Component{
             default:
                 break;
         }
-        this.props.callBackFunc && this.props.callBackFunc('Tools',arg);
-
+        //this.props.callBackFunc && this.props.callBackFunc('Tools',arg);
+        console.log(arg);
+        console.log(this.state);
+    }
+    _checkUserFriendly(arg){
+        switch (arg){
+            case 'Yes':
+                this.setState({isFriendly : true, notFriendly : false});
+                break;
+            case 'No':
+                this.setState({isFriendly : false, notFriendly : true});
+                break;
+            default:
+                break;
+        }
+    }
+    _otherToolsUsed(arg){
+        switch (arg){
+            case 'Yes':
+                this.setState({isTools : true, noTools : false});
+                break;
+            case 'No':
+                this.setState({noTools : true, isTools : false});
+                break;
+            default:
+                break;
+        }
     }
     render(){
         return <div>
@@ -46,15 +76,18 @@ class QuestionComponent extends React.Component{
                             compIdentifier="FavouriteFeatures"
                             callBackFunky={this.props.callBackFunc}
                             labelsForRadio={['Yes','No']}
-                            showInputOnStart={true}>
+                            callBackFunc={this._checkUserFriendly.bind(this)}>
                             Do you find it user friendly?
                         </ComboComp>
                     </div>
-                    <div className="large-12 columns">
-                        <ComboComp compIdentifier="LeastFavourite" callBackFunky={this.props.callBackFunc} showInputOnStart={true}>
-                            Please mention some of the features you don't like about the above tool(s)
-                        </ComboComp>
-                    </div>
+                </div>
+            </If>
+            <If condition={this.state.isFriendly}>
+                <div className="large-12 columns">
+                    <ComboComp compIdentifier="LeastFavourite" callBackFunky={this.props.callBackFunc}
+                               showInputOnStart={true}>
+                        Please mention some of the features you don't like about the above tool(s)
+                    </ComboComp>
                 </div>
             </If>
             <If condition={this.state.isNo}>
@@ -62,18 +95,20 @@ class QuestionComponent extends React.Component{
                     <div className="large-12 columns">
                         <ComboComp compIdentifier="NoTools"
                                    labelsForRadio={['Yes','No']}
-                                   callBackFunky={this.props.callBackFunc}
-                                   showInputOnStart={true}>
+                                   callBackFunc={this._otherToolsUsed.bind(this)}
+                                   callBackFunky={this.props.callBackFunc}>
                             Have you used other classroom or school management tools or applications?
                         </ComboComp>
                     </div>
-                    <div className="large-12 columns">
-                        <ComboComp compIdentifier="DreamTools"
-                                   callBackFunky={this.props.callBackFunc}
-                                   showInputOnStart={true}>
-                            If there were to be a software available to improve your work flow and or productivity what features would you want it to have?
-                        </ComboComp>
-                    </div>
+                </div>
+            </If>
+            <If condition={this.state.isTools && this.state.isNo}>
+                <div className="large-12 columns">
+                    <ComboComp compIdentifier="DreamTools"
+                               callBackFunky={this.props.callBackFunc}
+                               showInputOnStart={true}>
+                        Please provide the name of the classroom management application(s)
+                    </ComboComp>
                 </div>
             </If>
         </div>

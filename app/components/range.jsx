@@ -14,8 +14,9 @@ export default class Range extends React.Component{
     }
     _rangeInputChange(){
         const self = this;
-        console.log(self.refs.rangeVal.value);
+        //console.log(self.refs.rangeVal.value);
         self.setState({currentRange:self.refs.rangeVal.value});
+        self.props.callBackFunc && self.props.callBackFunc(self.props.compIdentifier,self.refs.rangeVal.value);
     }
     render(){
         return <div className="questionBox">
@@ -37,7 +38,9 @@ export default class Range extends React.Component{
 
 Range.propTypes = {
     minValue    :   React.PropTypes.number.isRequired,
+    compIdentifier  :   React.PropTypes.string.isRequired,
     maxValue    :   React.PropTypes.number.isRequired,
     rangeStep   :   React.PropTypes.number.isRequired,
-    desText     :   React.PropTypes.string
+    desText     :   React.PropTypes.string,
+    callBackFunc:   React.PropTypes.func
 };

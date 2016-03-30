@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e81ff3915b90750e6c03"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "ec14984d088e021a568f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -589,7 +589,7 @@
 	/**
 	 * Created by brightboahen on 10/03/2016.
 	 */
-	__webpack_require__(225);
+	__webpack_require__(230);
 
 
 	(0, _reactDom.render)(_react2.default.createElement(_main_page2.default, { title: 'Survey' }), document.getElementById('app'));
@@ -20210,9 +20210,17 @@
 
 	var _questions_page2 = _interopRequireDefault(_questions_page);
 
-	var _dashboard = __webpack_require__(224);
+	var _dashboard = __webpack_require__(226);
 
 	var _dashboard2 = _interopRequireDefault(_dashboard);
+
+	var _records = __webpack_require__(227);
+
+	var _records2 = _interopRequireDefault(_records);
+
+	var _main_component = __webpack_require__(228);
+
+	var _main_component2 = _interopRequireDefault(_main_component);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20234,7 +20242,7 @@
 	    _createClass(MainPage, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            console.log(_reactRouter.browserHistory);
+	            //console.log(browserHistory);
 	        }
 	    }, {
 	        key: 'render',
@@ -20242,11 +20250,13 @@
 	            return _react2.default.createElement(
 	                _reactRouter.Router,
 	                { history: _reactRouter.browserHistory },
+	                _react2.default.createElement(_reactRouter.Route, { path: '/', component: _questions_page2.default }),
 	                _react2.default.createElement(
 	                    _reactRouter.Route,
-	                    { path: '/', component: _questions_page2.default },
-	                    _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _dashboard2.default })
-	                )
+	                    { path: '/dashboard', component: _dashboard2.default },
+	                    _react2.default.createElement(_reactRouter.Route, { path: '/records', component: _records2.default })
+	                ),
+	                _react2.default.createElement(_reactRouter.Route, { path: '/main', component: _main_component2.default })
 	            );
 	        }
 	    }]);
@@ -25356,9 +25366,25 @@
 
 	var _question_comp2 = _interopRequireDefault(_question_comp);
 
-	var _firebase = __webpack_require__(223);
+	var _firebase = __webpack_require__(224);
 
 	var _firebase2 = _interopRequireDefault(_firebase);
+
+	var _range = __webpack_require__(225);
+
+	var _range2 = _interopRequireDefault(_range);
+
+	var _radio_label = __webpack_require__(223);
+
+	var _radio_label2 = _interopRequireDefault(_radio_label);
+
+	var _combo_comp = __webpack_require__(221);
+
+	var _combo_comp2 = _interopRequireDefault(_combo_comp);
+
+	var _if = __webpack_require__(222);
+
+	var _if2 = _interopRequireDefault(_if);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25383,13 +25409,17 @@
 	            Sex: '',
 	            Subject: '',
 	            YearGroup: '',
-	            Tools: '',
-	            FavouriteFeatures: '',
-	            LeastFavourite: '',
-	            NoTools: '',
-	            DreamTools: '',
-	            currentTools: ''
-
+	            ComputingSkills: '',
+	            TeachingExp: '',
+	            dailyTasks: '',
+	            CapitaSIMS: '',
+	            uFriendly: '',
+	            Features: '',
+	            other: ''
+	        };
+	        _this.state = {
+	            isCapita: false,
+	            isNot: false
 	        };
 	        return _this;
 	    }
@@ -25397,7 +25427,7 @@
 	    _createClass(QuestionsPage, [{
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
-	            this.firebaseRef = new _firebase2.default('https://sizzling-fire-1284.firebaseio.com/');
+	            this.firebaseRef = new _firebase2.default('https://sizzling-fire-1284.firebaseio.com/survey_data');
 	            //this.firebaseRef.on("child_added",function(snapshot){
 	            //    console.log(snapshot.val());
 	            //}.bind(this));
@@ -25415,12 +25445,30 @@
 	    }, {
 	        key: '_submitButtonClicked',
 	        value: function _submitButtonClicked() {
-	            if (this.brightHead.YearGroup !== '') {
+	            if (this.brightHead.ComputingSkills !== '') {
 	                this.firebaseRef.push(this.brightHead);
-	                alert("Responses successfully submitted,thank you");
+	                alert("Responses successfully submitted,thank you for taking part in this questionnaire - your responses are of great value");
+	                window.location.reload();
 	            } else {
 	                alert("Please fill in more questions");
 	            }
+	        }
+	    }, {
+	        key: '_radioControllerCallBack',
+	        value: function _radioControllerCallBack(args) {
+	            console.log(args);
+	            var self = this;
+	            switch (args) {
+	                case 'Yes':
+	                    self.setState({ isCapita: true, isNot: false });
+	                    break;
+	                case 'No':
+	                    self.setState({ isCapita: false, isNot: true });
+	                    break;
+	                default:
+	                    break;
+	            }
+	            self.brightHead.CapitaSIMS = args;
 	        }
 	    }, {
 	        key: 'render',
@@ -25432,8 +25480,16 @@
 	                    'div',
 	                    { className: 'large-12 columns' },
 	                    _react2.default.createElement(
+	                        'h4',
+	                        null,
+	                        'Thank you for deciding to take part in this survey. Information gathered would be used in profiling teachers into different user groups for productivity/classroom management software.'
+	                    ),
+	                    _react2.default.createElement(
 	                        _dropdown2.default,
-	                        { isMultiple: false, compIdentifier: 'TeacherAge', selectItems: ['20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69'], callBackFunc: this._pageCallback.bind(this) },
+	                        { isMultiple: false,
+	                            compIdentifier: 'TeacherAge',
+	                            selectItems: ['20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69'],
+	                            callBackFunc: this._pageCallback.bind(this) },
 	                        'Please select your age group'
 	                    )
 	                ),
@@ -25468,7 +25524,91 @@
 	                        'Please select the year group that you teach - to select multiple year groups hold down \'Ctrl\' key and click on subjects on windows or \'Cmd\' key and click if you are on a Mac.'
 	                    )
 	                ),
-	                _react2.default.createElement(_question_comp2.default, { callBackFunc: this._pageCallback.bind(this) }),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'large-12 columns' },
+	                    _react2.default.createElement(
+	                        _range2.default,
+	                        { minValue: 0,
+	                            maxValue: 10,
+	                            rangeStep: 1,
+	                            callBackFunc: this._pageCallback.bind(this),
+	                            compIdentifier: 'ComputingSkills' },
+	                        'On a scale of 1 - 10, please rate your computing skills'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'large-12 columns' },
+	                    _react2.default.createElement(
+	                        _range2.default,
+	                        { minValue: 0,
+	                            maxValue: 50,
+	                            rangeStep: 1,
+	                            callBackFunc: this._pageCallback.bind(this),
+	                            desText: 'Years', compIdentifier: 'TeachingExp' },
+	                        'How long have you been teaching?'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'large-12 columns' },
+	                    _react2.default.createElement(
+	                        _combo_comp2.default,
+	                        { compIdentifier: 'dailyTasks',
+	                            callBackFunky: this._pageCallback.bind(this),
+	                            showInputOnStart: true },
+	                        'What sort of tasks do you perform using a computer on a daily basis?'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'large-12 columns' },
+	                    _react2.default.createElement(
+	                        _radio_label2.default,
+	                        { labelsForRadio: ["Yes", "No"],
+	                            compIdentifier: 'CapitaSIMS',
+	                            callBackFunc: this._radioControllerCallBack.bind(this) },
+	                        'Do you use Capita SIMS School Management Software at your school?'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _if2.default,
+	                    { condition: this.state.isCapita },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'large-12 columns' },
+	                        _react2.default.createElement(
+	                            _range2.default,
+	                            { minValue: 0, maxValue: 5,
+	                                compIdentifier: 'uFriendly',
+	                                callBackFunc: this._pageCallback.bind(this),
+	                                rangeStep: 1 },
+	                            'On a scale of 1 - 5, how easy is it to use for your daily tasks?'
+	                        ),
+	                        _react2.default.createElement(
+	                            _combo_comp2.default,
+	                            { compIdentifier: 'Features', callBackFunky: this._pageCallback.bind(this),
+	                                showInputOnStart: true },
+	                            'Please mention some of the features you like about Capita SIMS tool'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _if2.default,
+	                    { condition: this.state.isNot },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'large-12 columns' },
+	                        _react2.default.createElement(
+	                            _combo_comp2.default,
+	                            { compIdentifier: 'other',
+	                                callBackFunky: this._pageCallback.bind(this),
+	                                showInputOnStart: true },
+	                            'Type in here any software or application that you use in completing your teaching tasks or managing the classroom.'
+	                        )
+	                    )
+	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'large-12 columns' },
@@ -25731,8 +25871,12 @@
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionComponent).call(this, props));
 
 	        _this.state = {
-	            isNone: false,
-	            isOther: false
+	            isYes: false,
+	            isNo: false,
+	            isFriendly: false,
+	            notFriendly: false,
+	            isTools: false,
+	            noTools: false
 	        };
 	        return _this;
 	    }
@@ -25741,17 +25885,47 @@
 	        key: 'checkTheNextQuestion',
 	        value: function checkTheNextQuestion(arg) {
 	            switch (arg) {
-	                case 'None':
-	                    this.setState({ isNone: true, isOther: false });
+	                case 'Yes':
+	                    console.log('is yes');
+	                    this.setState({ isYes: true, isNo: false });
 	                    break;
-	                case 'Other':
-	                    this.setState({ isOther: true, isNone: false });
+	                case 'No':
+	                    this.setState({ isYes: false, isNo: true });
 	                    break;
 	                default:
 	                    break;
-
 	            }
-	            this.props.callBackFunc && this.props.callBackFunc('Tools', arg);
+	            //this.props.callBackFunc && this.props.callBackFunc('Tools',arg);
+	            console.log(arg);
+	            console.log(this.state);
+	        }
+	    }, {
+	        key: '_checkUserFriendly',
+	        value: function _checkUserFriendly(arg) {
+	            switch (arg) {
+	                case 'Yes':
+	                    this.setState({ isFriendly: true, notFriendly: false });
+	                    break;
+	                case 'No':
+	                    this.setState({ isFriendly: false, notFriendly: true });
+	                    break;
+	                default:
+	                    break;
+	            }
+	        }
+	    }, {
+	        key: '_otherToolsUsed',
+	        value: function _otherToolsUsed(arg) {
+	            switch (arg) {
+	                case 'Yes':
+	                    this.setState({ isTools: true, noTools: false });
+	                    break;
+	                case 'No':
+	                    this.setState({ noTools: true, isTools: false });
+	                    break;
+	                default:
+	                    break;
+	            }
 	        }
 	    }, {
 	        key: 'render',
@@ -25764,13 +25938,17 @@
 	                    { className: 'large-12 columns' },
 	                    _react2.default.createElement(
 	                        _combo_comp2.default,
-	                        { compIdentifier: 'currentTools', labelsForRadio: ['None', 'Other'], callBackFunc: this.checkTheNextQuestion.bind(this), callBackFunky: this.props.callBackFunc },
-	                        'What type of tools, websites or applications do you use on a daily basis to aid your teaching? If you do please enter select \'Other\' and write them below, if not select "None"'
+	                        {
+	                            compIdentifier: 'currentTools',
+	                            labelsForRadio: ['Yes', 'No'],
+	                            callBackFunc: this.checkTheNextQuestion.bind(this),
+	                            callBackFunky: this.props.callBackFunc },
+	                        'Do you use Capita SIMS school management application at your school?'
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    _if2.default,
-	                    { condition: this.state.isOther },
+	                    { condition: this.state.isYes },
 	                    _react2.default.createElement(
 	                        'div',
 	                        null,
@@ -25779,24 +25957,33 @@
 	                            { className: 'large-12 columns' },
 	                            _react2.default.createElement(
 	                                _combo_comp2.default,
-	                                { compIdentifier: 'FavouriteFeatures', callBackFunky: this.props.callBackFunc, showInputOnStart: true },
-	                                'Please mention some of the features you like about the above tool(s)'
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'large-12 columns' },
-	                            _react2.default.createElement(
-	                                _combo_comp2.default,
-	                                { compIdentifier: 'LeastFavourite', callBackFunky: this.props.callBackFunc, showInputOnStart: true },
-	                                'Please mention some of the features you don\'t like about the above tool(s)'
+	                                {
+	                                    compIdentifier: 'FavouriteFeatures',
+	                                    callBackFunky: this.props.callBackFunc,
+	                                    labelsForRadio: ['Yes', 'No'],
+	                                    callBackFunc: this._checkUserFriendly.bind(this) },
+	                                'Do you find it user friendly?'
 	                            )
 	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    _if2.default,
-	                    { condition: this.state.isNone },
+	                    { condition: this.state.isFriendly },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'large-12 columns' },
+	                        _react2.default.createElement(
+	                            _combo_comp2.default,
+	                            { compIdentifier: 'LeastFavourite', callBackFunky: this.props.callBackFunc,
+	                                showInputOnStart: true },
+	                            'Please mention some of the features you don\'t like about the above tool(s)'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _if2.default,
+	                    { condition: this.state.isNo },
 	                    _react2.default.createElement(
 	                        'div',
 	                        null,
@@ -25805,18 +25992,27 @@
 	                            { className: 'large-12 columns' },
 	                            _react2.default.createElement(
 	                                _combo_comp2.default,
-	                                { compIdentifier: 'NoTools', callBackFunky: this.props.callBackFunc, showInputOnStart: true },
-	                                'Why don\'t you use any tools?'
+	                                { compIdentifier: 'NoTools',
+	                                    labelsForRadio: ['Yes', 'No'],
+	                                    callBackFunc: this._otherToolsUsed.bind(this),
+	                                    callBackFunky: this.props.callBackFunc },
+	                                'Have you used other classroom or school management tools or applications?'
 	                            )
-	                        ),
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _if2.default,
+	                    { condition: this.state.isTools && this.state.isNo },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'large-12 columns' },
 	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'large-12 columns' },
-	                            _react2.default.createElement(
-	                                _combo_comp2.default,
-	                                { compIdentifier: 'DreamTools', callBackFunky: this.props.callBackFunc, showInputOnStart: true },
-	                                'If there were to be a software available to improve your work flow and or productivity what features would you want it to have?'
-	                            )
+	                            _combo_comp2.default,
+	                            { compIdentifier: 'DreamTools',
+	                                callBackFunky: this.props.callBackFunc,
+	                                showInputOnStart: true },
+	                            'Please provide the name of the classroom management application(s)'
 	                        )
 	                    )
 	                )
@@ -25843,6 +26039,8 @@
 	    value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -25852,6 +26050,10 @@
 	var _if = __webpack_require__(222);
 
 	var _if2 = _interopRequireDefault(_if);
+
+	var _radio_label = __webpack_require__(223);
+
+	var _radio_label2 = _interopRequireDefault(_radio_label);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25869,6 +26071,7 @@
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ComboComp).call(this, props));
 
+	        _this.props = props;
 	        _this.state = {
 	            leftState: false,
 	            rightState: false,
@@ -25889,12 +26092,12 @@
 	        key: '_radioButtonChange',
 	        value: function _radioButtonChange(label) {
 	            switch (label) {
-	                case 'None':
-	                    this.setState({ leftState: true, rightState: false, showInput: false });
+	                case 'Yes':
+	                    this.setState({ leftState: true, rightState: false });
 	                    this.props.callBackFunc && this.props.callBackFunc(label);
 	                    break;
-	                case 'Other':
-	                    this.setState({ rightState: true, leftState: false, showInput: true });
+	                case 'No':
+	                    this.setState({ rightState: true, leftState: false });
 	                    this.props.callBackFunc && this.props.callBackFunc(label);
 	                    break;
 	                default:
@@ -25904,22 +26107,10 @@
 	    }, {
 	        key: '_renderRadioButtons',
 	        value: function _renderRadioButtons() {
-	            var _this2 = this;
-
-	            if (this.props.labelsForRadio) {
-	                return this.props.labelsForRadio.map(function (label, at) {
-	                    return _react2.default.createElement(
-	                        'div',
-	                        { key: at, className: 'inlineRadio' },
-	                        _react2.default.createElement('input', { name: label, type: 'radio', checked: at === 0 ? _this2.state.leftState : _this2.state.rightState, onChange: _this2._radioButtonChange.bind(_this2, label) }),
-	                        _react2.default.createElement(
-	                            'label',
-	                            { htmlFor: label },
-	                            label
-	                        )
-	                    );
-	                });
-	            }
+	            var self = this;
+	            console.log(self.props);
+	            return _react2.default.createElement(_radio_label2.default, _extends({}, self.props, {
+	                callBack: this._radioButtonChange.bind(this) }));
 	        }
 	    }, {
 	        key: '_onTextAreaChange',
@@ -25937,7 +26128,6 @@
 	                    null,
 	                    this.props.children
 	                ),
-	                this._renderRadioButtons(),
 	                _react2.default.createElement(
 	                    _if2.default,
 	                    { condition: this.state.showInput },
@@ -25955,7 +26145,6 @@
 	}(_react2.default.Component);
 
 	ComboComp.propTypes = {
-	    labelsForRadio: _react2.default.PropTypes.array,
 	    compIdentifier: _react2.default.PropTypes.string,
 	    callBackFunky: _react2.default.PropTypes.func,
 	    callBackFunc: _react2.default.PropTypes.func,
@@ -25993,7 +26182,10 @@
 	    function If(props) {
 	        _classCallCheck(this, If);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(If).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(If).call(this, props));
+
+	        _this.props = props;
+	        return _this;
 	    }
 
 	    _createClass(If, [{
@@ -26017,6 +26209,112 @@
 
 /***/ },
 /* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var RadioLabel = function (_React$Component) {
+	    _inherits(RadioLabel, _React$Component);
+
+	    function RadioLabel(props) {
+	        _classCallCheck(this, RadioLabel);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RadioLabel).call(this, props));
+
+	        _this.props = props;
+	        _this.state = {
+	            firstRadio: false,
+	            lastRadio: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(RadioLabel, [{
+	        key: '_radioClicked',
+	        value: function _radioClicked(label, name) {
+	            var self = this,
+	                radioEL = self.refs[label];
+	            switch (label) {
+	                case 'firstRadio':
+	                    self.setState({ firstRadio: true, lastRadio: false });
+	                    break;
+	                case 'lastRadio':
+	                    self.setState({ firstRadio: false, lastRadio: true });
+	                    break;
+	                default:
+	                    break;
+	            }
+	            self.props.callBackFunc && self.props.callBackFunc(name);
+	            console.log(this.state);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var self = this,
+	                firstLabel = self.props.labelsForRadio[0],
+	                secondLabel = self.props.labelsForRadio[1];
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'questionBox' },
+	                this.props.children,
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement('input', { name: firstLabel,
+	                        onChange: this._radioClicked.bind(this, 'firstRadio', firstLabel),
+	                        checked: self.state.firstRadio,
+	                        ref: 'firstRadio',
+	                        type: 'radio' }),
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: firstLabel },
+	                        firstLabel
+	                    ),
+	                    _react2.default.createElement('input', { name: secondLabel,
+	                        onChange: this._radioClicked.bind(this, 'lastRadio', secondLabel),
+	                        checked: self.state.lastRadio,
+	                        ref: 'lastRadio',
+	                        type: 'radio' }),
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: secondLabel },
+	                        secondLabel
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return RadioLabel;
+	}(_react2.default.Component);
+
+	exports.default = RadioLabel;
+
+	RadioLabel.propTypes = {
+	    labelsForRadio: _react2.default.PropTypes.array.isRequired,
+	    callBackFunc: _react2.default.PropTypes.func
+	};
+
+/***/ },
+/* 224 */
 /***/ function(module, exports) {
 
 	/*! @license Firebase v2.4.1
@@ -26301,7 +26599,101 @@
 
 
 /***/ },
-/* 224 */
+/* 225 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Range = function (_React$Component) {
+	    _inherits(Range, _React$Component);
+
+	    function Range(props) {
+	        _classCallCheck(this, Range);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Range).call(this, props));
+
+	        _this.props = props;
+	        _this.state = {
+	            currentRange: 0
+	        };
+	        return _this;
+	    }
+
+	    _createClass(Range, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            var defaultRange = this.props.maxValue / 2;
+	            this.setState({ currentRange: defaultRange });
+	        }
+	    }, {
+	        key: "_rangeInputChange",
+	        value: function _rangeInputChange() {
+	            var self = this;
+	            //console.log(self.refs.rangeVal.value);
+	            self.setState({ currentRange: self.refs.rangeVal.value });
+	            self.props.callBackFunc && self.props.callBackFunc(self.props.compIdentifier, self.refs.rangeVal.value);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "questionBox" },
+	                this.props.children,
+	                _react2.default.createElement(
+	                    "div",
+	                    null,
+	                    _react2.default.createElement("input", { onChange: this._rangeInputChange.bind(this),
+	                        ref: "rangeVal",
+	                        type: "range",
+	                        min: this.props.minValue,
+	                        max: this.props.maxValue,
+	                        step: this.props.rangeStep }),
+	                    _react2.default.createElement(
+	                        "span",
+	                        { style: { marginLeft: 20 + 'px' } },
+	                        this.state.currentRange + ' ' + (this.props.desText !== undefined ? this.props.desText : '')
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Range;
+	}(_react2.default.Component);
+
+	exports.default = Range;
+
+
+	Range.propTypes = {
+	    minValue: _react2.default.PropTypes.number.isRequired,
+	    compIdentifier: _react2.default.PropTypes.string.isRequired,
+	    maxValue: _react2.default.PropTypes.number.isRequired,
+	    rangeStep: _react2.default.PropTypes.number.isRequired,
+	    desText: _react2.default.PropTypes.string,
+	    callBackFunc: _react2.default.PropTypes.func
+	};
+
+/***/ },
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */'use strict';
@@ -26316,9 +26708,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _firebase = __webpack_require__(223);
+	var _firebase = __webpack_require__(224);
 
 	var _firebase2 = _interopRequireDefault(_firebase);
+
+	var _reactRouter = __webpack_require__(160);
+
+	var _if = __webpack_require__(222);
+
+	var _if2 = _interopRequireDefault(_if);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26334,7 +26732,13 @@
 	    function Dashboard(props) {
 	        _classCallCheck(this, Dashboard);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Dashboard).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dashboard).call(this, props));
+
+	        _this.props = props;
+	        _this.state = {
+	            auth: null
+	        };
+	        return _this;
 	    }
 
 	    _createClass(Dashboard, [{
@@ -26342,17 +26746,94 @@
 	        value: function componentWillMount() {
 	            var self = this;
 	            self.firebaseRef = new _firebase2.default('https://sizzling-fire-1284.firebaseio.com/');
-	            self.firebaseRef.on('child_added', function (snapshot) {
-	                console.log(snapshot.val());
-	            });
+	            self.setState({ auth: self.firebaseRef.getAuth() });
+	            //let uid = window.sessionStorage.getItem('user');
+	        }
+	    }, {
+	        key: 'loginButtonClicked',
+	        value: function loginButtonClicked() {
+	            var self = this;
+	            if (self.refs.em.value !== '' && self.refs.pw.value !== '') {
+	                self.firebaseRef.authWithPassword({
+	                    email: self.refs.em.value,
+	                    password: self.refs.pw.value
+	                }, function (error, authData) {
+	                    if (error) {
+	                        console.error("Login failed ", error);
+	                    } else {
+	                        console.log("Authenticated successfully with payload ", authData);
+	                        var path = '/records';
+	                        _reactRouter.browserHistory.push(path);
+	                        self.setState({ uidSet: authData });
+	                    }
+	                });
+	            } else {
+	                alert('Please provide a valid login details');
+	            }
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                null,
-	                'I am the dashboard'
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'small-12 large-12 columns' },
+	                    _react2.default.createElement(
+	                        _if2.default,
+	                        { condition: this.state.auth === null },
+	                        _react2.default.createElement(
+	                            'form',
+	                            null,
+	                            _react2.default.createElement(
+	                                'fieldset',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'legend',
+	                                    null,
+	                                    'Login'
+	                                ),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'row' },
+	                                    _react2.default.createElement(
+	                                        'div',
+	                                        { className: 'small-12 large-12 columns' },
+	                                        _react2.default.createElement('input', { ref: 'em', type: 'email', placeholder: 'Enter email' })
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'row' },
+	                                    _react2.default.createElement(
+	                                        'div',
+	                                        { className: 'small-12 large-12 columns' },
+	                                        _react2.default.createElement('input', { ref: 'pw', type: 'password', placeholder: 'Enter Password' })
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'row' },
+	                                    _react2.default.createElement(
+	                                        'div',
+	                                        { className: 'small-12 large-12 columns' },
+	                                        _react2.default.createElement('input', { className: 'large button', type: 'button', value: 'Login', onClick: this.loginButtonClicked.bind(this) })
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _if2.default,
+	                    { condition: this.state.auth !== null && this.state.auth.uid !== null },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'small-12 large-12 columns' },
+	                        this.props.children
+	                    )
+	                )
 	            );
 	        }
 	    }]);
@@ -26363,23 +26844,403 @@
 	exports.default = Dashboard;
 
 /***/ },
-/* 225 */
+/* 227 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _firebase = __webpack_require__(224);
+
+	var _firebase2 = _interopRequireDefault(_firebase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Records = function (_React$Component) {
+	    _inherits(Records, _React$Component);
+
+	    function Records(props) {
+	        _classCallCheck(this, Records);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Records).call(this, props));
+
+	        _this.state = {
+	            recordItems: {}
+	        };
+	        return _this;
+	    }
+
+	    _createClass(Records, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var self = this;
+	            self.firebaseRef = new _firebase2.default('https://sizzling-fire-1284.firebaseio.com/survey_data');
+	            self.firebaseRef.onAuth(this._authDataCallback.bind(self));
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            this.firebaseRef.offAuth(this._authDataCallback.bind(this));
+	        }
+	    }, {
+	        key: '_authDataCallback',
+	        value: function _authDataCallback(authData) {
+	            var self = this;
+	            if (authData) {
+	                //console.log('logged in as '+authData.uid);
+	                self.firebaseRef.on("value", function (data) {
+	                    self.setState({ recordItems: data.val() });
+	                }, function (errorObject) {
+	                    //console.log('error occurred ',errorObject);
+	                });
+	            } else {
+	                    //console.log('not logged in');
+	                }
+	        }
+	    }, {
+	        key: '_renderRecordItems',
+	        value: function _renderRecordItems() {
+	            var self = this,
+	                itemsInAr = [];
+	            for (var property in self.state.recordItems) {
+	                itemsInAr.push(self.state.recordItems[property]);
+	            }
+	            if (itemsInAr.length >= 1) {
+	                return itemsInAr.map(function (item, i) {
+	                    return _react2.default.createElement(
+	                        'tr',
+	                        { key: i },
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            i + 1
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.TeacherAge
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.Sex
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.Subject
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.YearGroup
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.ComputingSkills
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.TeachingExp
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.dailyTasks
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.CapitaSIMS
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.uFriendly
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.Features
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            item.other
+	                        )
+	                    );
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'table',
+	                    null,
+	                    _react2.default.createElement(
+	                        'thead',
+	                        null,
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '10' },
+	                                'Number'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '200' },
+	                                'Teacher Age'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '400' },
+	                                'Sex(Male or Female)'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '150' },
+	                                'Subject'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '150' },
+	                                'Year Group'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '150' },
+	                                'Computing Skills'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '150' },
+	                                'Teaching Experience'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '150' },
+	                                'Tasks'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '350' },
+	                                'Uses Capita SIMS'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '150' },
+	                                'Capita SIMS is user friendly'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '350' },
+	                                'Favourite features of CAPITA SIMS'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                { width: '350' },
+	                                'Uses other tools'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tbody',
+	                        null,
+	                        this._renderRecordItems()
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Records;
+	}(_react2.default.Component);
+
+	exports.default = Records;
+
+/***/ },
+/* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _my_promise = __webpack_require__(229);
+
+	var _my_promise2 = _interopRequireDefault(_my_promise);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var MainComp = function (_React$Component) {
+	    _inherits(MainComp, _React$Component);
+
+	    function MainComp(props) {
+	        _classCallCheck(this, MainComp);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(MainComp).call(this, props));
+	    }
+
+	    _createClass(MainComp, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {}
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                'Main Component'
+	            );
+	        }
+	    }]);
+
+	    return MainComp;
+	}(_react2.default.Component);
+
+	exports.default = MainComp;
+
+/***/ },
+/* 229 */
+/***/ function(module, exports) {
+
+	/** @jsx React.DOM *//**
+	 * Created by brightdarkoboahen on 28/03/2016.
+	 */
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var MyPromise = function () {
+	    function MyPromise(url) {
+	        _classCallCheck(this, MyPromise);
+
+	        this.url = url;
+	    }
+
+	    _createClass(MyPromise, [{
+	        key: 'Promise',
+	        value: function (_Promise) {
+	            function Promise(_x, _x2, _x3) {
+	                return _Promise.apply(this, arguments);
+	            }
+
+	            Promise.toString = function () {
+	                return _Promise.toString();
+	            };
+
+	            return Promise;
+	        }(function (method, url, args) {
+	            return new Promise(function (resolve, reject) {
+	                var client = new XMLHttpRequest(),
+	                    uri = url;
+	                if (args && (method === 'POST' || method === 'PUT')) {
+	                    uri += '?';
+	                    var argcount = 0;
+	                    for (var key in args) {
+	                        if (args.hasOwnProperty(key)) {
+	                            if (argcount++) {
+	                                uri += '&';
+	                            }
+	                            uri += encodeURIComponent(key) + '=' + encodeURIComponent(args[key]);
+	                        }
+	                    }
+	                }
+	                client.open(method, uri);
+	                client.send();
+	                client.onload = function () {
+	                    if (this.status >= 200 && this.status < 300) {
+	                        resolve(this.response);
+	                    } else {
+	                        reject(this.statusText);
+	                    }
+	                };
+	                client.onerror = function () {
+	                    reject(this.statusText);
+	                };
+	            });
+	        })
+	    }, {
+	        key: 'get',
+	        value: function get(args) {
+	            return this.Promise('GET', this.url, args);
+	        }
+	    }, {
+	        key: 'post',
+	        value: function post(args) {
+	            return this.Promise('POST', this.url, args);
+	        }
+	    }, {
+	        key: 'put',
+	        value: function put() {}
+	    }]);
+
+	    return MyPromise;
+	}();
+
+	exports.default = MyPromise;
+
+/***/ },
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(226);
+	var content = __webpack_require__(231);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(228)(content, {});
+	var update = __webpack_require__(233)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(226, function() {
-				var newContent = __webpack_require__(226);
+			module.hot.accept(231, function() {
+				var newContent = __webpack_require__(231);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -26389,10 +27250,10 @@
 	}
 
 /***/ },
-/* 226 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(227)();
+	exports = module.exports = __webpack_require__(232)();
 	// imports
 
 
@@ -26403,7 +27264,7 @@
 
 
 /***/ },
-/* 227 */
+/* 232 */
 /***/ function(module, exports) {
 
 	/*
@@ -26459,7 +27320,7 @@
 
 
 /***/ },
-/* 228 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

@@ -19,14 +19,14 @@ class Records extends React.Component{
     _authDataCallback(authData){
         const self = this;
         if(authData){
-            console.log('logged in as '+authData.uid);
+            //console.log('logged in as '+authData.uid);
             self.firebaseRef.on("value",function(data){
                 self.setState({recordItems:data.val()});
             },function(errorObject){
-                console.log('error occurred ',errorObject);
+                //console.log('error occurred ',errorObject);
             });
         }else{
-            console.log('not logged in');
+            //console.log('not logged in');
         }
     }
     _renderRecordItems(){
@@ -43,12 +43,13 @@ class Records extends React.Component{
                     <td>{item.Sex}</td>
                     <td>{item.Subject}</td>
                     <td>{item.YearGroup}</td>
-                    <td>{item.Tools}</td>
-                    <td>{item.FavouriteFeatures}</td>
-                    <td>{item.LeastFavourite}</td>
-                    <td>{item.NoTools}</td>
-                    <td>{item.DreamTools}</td>
-                    <td>{item.currentTools}</td>
+                    <td>{item.ComputingSkills}</td>
+                    <td>{item.TeachingExp}</td>
+                    <td>{item.dailyTasks}</td>
+                    <td>{item.CapitaSIMS}</td>
+                    <td>{item.uFriendly}</td>
+                    <td>{item.Features}</td>
+                    <td>{item.other}</td>
                 </tr>
             });
         }
@@ -63,12 +64,13 @@ class Records extends React.Component{
                     <th width="400">Sex(Male or Female)</th>
                     <th width="150">Subject</th>
                     <th width="150">Year Group</th>
-                    <th width="150">Tools</th>
-                    <th width="150">Favourite Features</th>
-                    <th width="350">Least Favourite Features</th>
-                    <th width="150">No Tools</th>
-                    <th width="350">Dream Tools</th>
-                    <th width="350">Current Tools</th>
+                    <th width="150">Computing Skills</th>
+                    <th width="150">Teaching Experience</th>
+                    <th width="150">Tasks</th>
+                    <th width="350">Uses Capita SIMS</th>
+                    <th width="150">Capita SIMS is user friendly</th>
+                    <th width="350">Favourite features of CAPITA SIMS</th>
+                    <th width="350">Uses other tools</th>
                 </tr>
                 </thead>
                 <tbody>

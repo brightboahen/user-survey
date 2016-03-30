@@ -1,5 +1,6 @@
 import React from 'react';
 import If from './if';
+import RadioLabel from './radio_label'
 class ComboComp extends React.Component{
     constructor(props){
         super(props);
@@ -19,11 +20,11 @@ class ComboComp extends React.Component{
     _radioButtonChange(label){
         switch (label){
             case 'Yes':
-                this.setState({leftState:true, rightState:false, showInput:false});
+                this.setState({leftState:true, rightState:false});
                 this.props.callBackFunc && this.props.callBackFunc(label);
                 break;
             case 'No':
-                this.setState({rightState:true, leftState:false, showInput:true});
+                this.setState({rightState:true, leftState:false});
                 this.props.callBackFunc && this.props.callBackFunc(label);
                 break;
             default:
@@ -31,15 +32,10 @@ class ComboComp extends React.Component{
         }
     }
     _renderRadioButtons(){
-        if(this.props.labelsForRadio){
-            return this.props.labelsForRadio.map((label, at)=>{
-                return <div key={at} className="inlineRadio">
-                    {console.log(at)}
-                    <input name={label} type="radio" checked={at === 0?this.state.leftState:this.state.rightState} onChange={this._radioButtonChange.bind(this,label)} />
-                    <label htmlFor={label}>{label}</label>
-                </div>
-            });
-        }
+        const   self    =   this;
+        console.log(self.props);
+        return <RadioLabel {...self.props}
+            callBack={this._radioButtonChange.bind(this)}/>
     }
     _onTextAreaChange(){
         this.props.callBackFunky && this.props.callBackFunky(this.props.compIdentifier, this.refs.textInputArea.value);
@@ -47,17 +43,15 @@ class ComboComp extends React.Component{
     render(){
         return <div className="questionBox">
             <p>{this.props.children}</p>
-            {this._renderRadioButtons()}
-            <If condition={this.state.showInput}>
+            {<If condition={this.state.showInput}>
                 <div>
                     <textarea onChange={this._onTextAreaChange.bind(this)} ref="textInputArea" className="combobox_input"/>
                 </div>
-            </If>
+            </If>}
         </div>
     }
 }
 ComboComp.propTypes = {
-    labelsForRadio : React.PropTypes.array,
     compIdentifier : React.PropTypes.string,
     callBackFunky : React.PropTypes.func,
     callBackFunc : React.PropTypes.func,
